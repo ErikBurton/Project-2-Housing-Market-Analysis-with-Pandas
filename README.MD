@@ -1,40 +1,46 @@
 # Housing Market Analysis with Pandas
 
 ## Overview
-This project analyzes a housing dataset using **Python, Pandas, and Matplotlib**.  
-The focus is on understanding housing price trends across cities and over time,  
-and exploring the relationship between house size and price.
+
+As a software engineer, I am using this project to strengthen my skills in data analysis, data cleaning, and visualization using Python.  
+The dataset analyzed comes from Kaggle: **[Real Estate Data Utah 2024](https://www.kaggle.com/datasets/kanchana1990/real-estate-data-utah-2024)**.  
+It contains over 4,000 real estate listings across Utah, including key fields such as `County`, `City`, `Price`, `SqFt`, `Bedrooms`, `Bathrooms`, and `ListingDate`.  
+
+For this project, I focused on **Salt Lake County** specifically, filtering the dataset to analyze housing trends in this area.  
+
+The purpose of this software is to uncover patterns in the Salt Lake County housing market, including average prices by city, price trends over time, and the relationship between house size and price. This analysis demonstrates how to use Pandas for filtering, grouping, and aggregating data, along with Matplotlib for visualizations.  
+
+[Software Demo Video](http://youtube.link.goes.here)
 
 ---
 
-## Dataset
-- **Source**: [Kaggle Housing Dataset](https://www.kaggle.com/)  
-- **Description**: Dataset includes housing prices, location (city/region), size in square feet, and year built/sold.  
-- **Reason for Selection**: Housing data is well-documented and provides clear opportunities for aggregation and visualization.  
+# Data Analysis Results
+
+The following questions were asked and answered from the dataset (Salt Lake County only):  
+
+1. **What is the average housing price per city in Salt Lake County?**  
+   - *Method:* Used `groupby("City")` with `mean("Price")`.  
+   - *Result:* (Insert your top 5–10 cities with average prices here after running code.)  
+
+2. **How have housing prices in Salt Lake County changed over time?**  
+   - *Method:* Derived year from `ListingDate`, grouped by year, calculated average price.  
+   - *Result:* (Insert summary of trend here; e.g., prices steadily increased since 2018 with a peak in 2022.)  
+
+3. **What is the relationship between house size (square feet) and price?**  
+   - *Method:* Scatter plot comparing `SqFt` vs. `Price`.  
+   - *Result:* (Summarize correlation; e.g., larger homes tend to cost more, but with some high-priced outliers.)  
 
 ---
 
-## Questions Answered
-1. **Question 1**: What is the **average housing price per city/region**?  
-   - **Method**: Used `groupby('City')` with `mean()`.  
-   - **Result**: Provided a ranked list of average prices.  
+# Development Environment
 
-2. **Question 2**: How have **housing prices changed over time**?  
-   - **Method**: Grouped by year, calculated mean, and sorted chronologically.  
-   - **Result**: Clear trend showing price increases/decreases over years.  
+- **Tools**: Visual Studio Code, Git, GitHub  
+- **Programming Language**: Python 3.x  
+- **Libraries**:  
+  - [Pandas](https://pandas.pydata.org/) – data manipulation and analysis  
+  - [Matplotlib](https://matplotlib.org/) – data visualization  
 
-3. **Additional Requirement (Graph)**:  
-   - A **line chart** of average house price over time.  
-   - A **scatter plot** of price vs. square feet, showing size-to-price relationship.  
-
-*(Insert screenshots of charts here)*  
-
----
-
-## Development Environment
-- **Language**: Python 3.x  
-- **Libraries**: Pandas, Matplotlib  
-- **Tools**: VS Code, Git, GitHub  
-- **Install**:  
+To install dependencies:  
 ```bash
-pip install pandas matplotlib
+pip install -r requirements.txt
+
