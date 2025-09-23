@@ -18,6 +18,7 @@ Description:
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
 
 
 # ---------- Load & Clean ----------
@@ -107,15 +108,27 @@ def avg_price_by_sale_year(df: pd.DataFrame) -> pd.DataFrame:
 # ---------- Plots ----------
 
 def plot_price_trend(trends: pd.DataFrame, outdir: str):
-    """Line chart of avg price by sale year."""
+    """Line chart of avg price by sale year with labels."""
     path = os.path.join(outdir, "price_trend.png")
     plt.figure(figsize=(8, 5))
     plt.plot(trends["SaleYear"], trends[
         "AveragePrice"], marker="o", color="blue")
     plt.title("Average Housing Price Over Sale Years")
     plt.xlabel("Year")
-    plt.ylabel("Average Price ($)")
+    plt.ylabel("Avg Price ($)")
     plt.grid(True)
+
+    ax = plt.gca()
+    # Format x-axis as integers (years)
+    ax.xaxis.set_major_formatter(mtick.FormatStrFormatter('%d'))
+    # Format y-axis as currency
+    ax.yaxis.set_major_formatter(mtick.StrMethodFormatter('${x:,.0f}'))
+
+    # Add data labels above each point
+    for x, y in zip(trends["SaleYear"], trends["AveragePrice"]):
+        ax.text(x, y, f"${
+            y:,.0f}", ha="center", va="bottom", fontsize=8, rotation=45)
+
     plt.tight_layout()
     plt.savefig(path, dpi=150)
     print()
@@ -128,8 +141,15 @@ def plot_price_vs_sqft(df: pd.DataFrame, outdir: str):
     plt.figure(figsize=(8, 5))
     plt.scatter(df["sqft"], df["listPrice"], alpha=0.5, color="green")
     plt.title("Price vs. Square Feet")
-    plt.xlabel("Square Feet")
+    plt.xlabel("Sq Ft")
     plt.ylabel("Price ($)")
+
+    ax = plt.gca()
+    # Format x-axis with commas for sqft
+    ax.xaxis.set_major_formatter(mtick.StrMethodFormatter('{x:,.0f}'))
+    # Format y-axis as currency
+    ax.yaxis.set_major_formatter(mtick.StrMethodFormatter('${x:,.0f}'))
+
     plt.tight_layout()
     plt.savefig(path, dpi=150)
     print(f"[SAVE] {path}")
