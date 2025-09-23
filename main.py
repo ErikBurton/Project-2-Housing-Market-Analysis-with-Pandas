@@ -54,20 +54,32 @@ def clean_dataset(df: pd.DataFrame) -> pd.DataFrame:
 # ---------- Analyses ----------
 
 def avg_price_by_year_built(df: pd.DataFrame) -> pd.DataFrame:
-    """Average price by year built."""
+    """Average price by year built (filtered 2014–2024)."""
     result = (
         df.groupby("year_built")["listPrice"]
         .mean()
         .reset_index(name="AveragePrice")
         .sort_values("year_built")
     )
-    print("[RESULT] Avg Price by Year Built (first 10 rows):")
-    print(result.head(10))
+
+    # Ensure year_built is int
+    result["year_built"] = result["year_built"].astype("Int64")
+
+    # Filter for 2014–2024
+    result = result[result["year_built"].between(2014, 2024)]
+
+    print()
+    print("[RESULT] Avg Price by Year Built (2014–2024):")
+    formatted = result.copy()
+    formatted["AveragePrice"] = formatted["AveragePrice"].map(
+        lambda x: f"${x:,.0f}")
+    print(formatted)
+
     return result
 
 
 def avg_price_by_sale_year(df: pd.DataFrame) -> pd.DataFrame:
-    """Average price by sale year (from lastSoldOn)."""
+    """Average price by sale year (filtered 2014–2024)."""
     df["SaleYear"] = df["lastSoldOn"].dt.year
     result = (
         df.groupby("SaleYear")["listPrice"]
@@ -76,13 +88,19 @@ def avg_price_by_sale_year(df: pd.DataFrame) -> pd.DataFrame:
         .sort_values("SaleYear")
     )
 
-    if not result.empty:
-        max_year = result["SaleYear"].max()
-        min_year = max_year - 19
-        result = result[result["SaleYear"].between(min_year, max_year)]
+    # Ensure SaleYear is int
+    result["SaleYear"] = result["SaleYear"].astype("Int64")
 
-    print("[RESULT] Avg Price by Sale Year (last 20 years):")
-    print(result)
+    # Filter for 2014–2024
+    result = result[result["SaleYear"].between(2014, 2024)]
+
+    print()
+    print("[RESULT] Avg Price by Sale Year (2014–2024):")
+    formatted = result.copy()
+    formatted["AveragePrice"] = formatted["AveragePrice"].map(
+        lambda x: f"${x:,.0f}")
+    print(formatted)
+
     return result
 
 
@@ -100,6 +118,7 @@ def plot_price_trend(trends: pd.DataFrame, outdir: str):
     plt.grid(True)
     plt.tight_layout()
     plt.savefig(path, dpi=150)
+    print()
     print(f"[SAVE] {path}")
 
 
@@ -127,6 +146,11 @@ def main():
     if df.empty:
         return
     df = clean_dataset(df)
+
+    print()
+    print("\n[INFO] Preview of dataset after cleaning:")
+    print()
+    print(df.head())
 
     # Q1: Average price by year built
     avg_by_year_built = avg_price_by_year_built(df)

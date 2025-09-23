@@ -69,15 +69,21 @@
       header: true,
       complete: function(results) {
         const tbody = document.querySelector("#year-built-table tbody");
-        results.data.forEach(row => {
-          if(row.year_built && row.AveragePrice) {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td>${row.year_built}</td>
-              <td>$${parseFloat(row.AveragePrice).toLocaleString()}</td>
-            `;
-            tbody.appendChild(tr);
-          }
+
+        const rows = results.data.filter(r => r.year_built && r.AveragePrice);
+        // Filter for 2014–2024 explicitly
+        const filtered = rows.filter(r => {
+          const y = parseInt(r.year_built, 10);
+          return y >= 2014 && y <= 2024;
+        });
+
+        filtered.forEach(row => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${parseInt(row.year_built, 10)}</td>
+            <td>$${parseFloat(row.AveragePrice).toLocaleString()}</td>
+          `;
+          tbody.appendChild(tr);
         });
       }
     });
