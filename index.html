@@ -22,20 +22,37 @@
       <div class="row">
         <div class="col-md-6 mb-3 text-center">
           <img src="outputs/price_trend.png" alt="Price Trend Over Time" class="img-fluid rounded shadow">
+          <p class="text-muted mt-2">Average Housing Price by Sale Year</p>
         </div>
         <div class="col-md-6 mb-3 text-center">
           <img src="outputs/price_vs_sqft.png" alt="Price vs. Square Feet" class="img-fluid rounded shadow">
+          <p class="text-muted mt-2">Price vs. Square Feet Scatter Plot</p>
         </div>
       </div>
     </section>
 
-    <section>
-      <h2 class="h4">Average Price by City</h2>
+    <section class="mb-5">
+      <h2 class="h4">Average Price by Year Built</h2>
       <div class="table-responsive">
-        <table class="table table-striped table-hover shadow-sm" id="city-table">
+        <table class="table table-striped table-hover shadow-sm" id="year-built-table">
+          <thead class="table-dark">
+        <tr>
+          <th scope="col">Year Built</th>
+          <th scope="col">Average Price</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    </div>
+    </section>
+
+    <section>
+      <h2 class="h4">Average Price by Sale Year</h2>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover shadow-sm" id="sale-year-table">
           <thead class="table-dark">
             <tr>
-              <th scope="col">City</th>
+              <th scope="col">Sale Year</th>
               <th scope="col">Average Price</th>
             </tr>
           </thead>
@@ -46,17 +63,36 @@
   </div>
 
   <script>
-    // Load and display avg_price_by_city.csv
-    Papa.parse("outputs/avg_price_by_city.csv", {
+    // Load and display avg_price_by_year_built.csv
+    Papa.parse("outputs/avg_price_by_year_built.csv", {
       download: true,
       header: true,
       complete: function(results) {
-        const tbody = document.querySelector("#city-table tbody");
+        const tbody = document.querySelector("#year-built-table tbody");
         results.data.forEach(row => {
-          if(row.City && row.AveragePrice) {
+          if(row.year_built && row.AveragePrice) {
             const tr = document.createElement("tr");
             tr.innerHTML = `
-              <td>${row.City}</td>
+              <td>${row.year_built}</td>
+              <td>$${parseFloat(row.AveragePrice).toLocaleString()}</td>
+            `;
+            tbody.appendChild(tr);
+          }
+        });
+      }
+    });
+
+    // Load and display avg_price_by_sale_year.csv
+    Papa.parse("outputs/avg_price_by_sale_year.csv", {
+      download: true,
+      header: true,
+      complete: function(results) {
+        const tbody = document.querySelector("#sale-year-table tbody");
+        results.data.forEach(row => {
+          if(row.SaleYear && row.AveragePrice) {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${row.SaleYear}</td>
               <td>$${parseFloat(row.AveragePrice).toLocaleString()}</td>
             `;
             tbody.appendChild(tr);
